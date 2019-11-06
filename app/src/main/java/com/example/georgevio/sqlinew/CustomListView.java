@@ -4,59 +4,48 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class CustomListView {
+public class CustomListView extends ArrayAdapter<user> {
 
-    private ArrayList<String> listData;
-    private LayoutInflater layoutInflater;
-    private Context context;
+    private LayoutInflater mInflater;
+    private ArrayList<user> users;
+    private int mViewResourceId;
 
-    // Constructor
-    public CustomListView(Context context, ArrayList<String> listData) {
-        this.listData = listData;
-        layoutInflater = LayoutInflater.from(context);
-        this.context = context;
-    }
-
-    public int getCount() {
-        return listData.size();
-    }
-
-    public Object getItem(int position) {
-        return listData.get(position);
-    }
-
-    public long getItemId(int position) {
-        return position;
+    public CustomListView(Context context, int textViewResourceId, ArrayList<user> users) {
+        super(context, textViewResourceId, users);
+        this.users = users;
+        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mViewResourceId = textViewResourceId;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        //      int type = getItemViewType(position);
+        convertView = mInflater.inflate(mViewResourceId, null);
 
-        if (convertView == null) {
+        user user = users.get(position);
 
-            convertView = layoutInflater.inflate(R.layout.listview_row, null);
-            holder = new ViewHolder();
-
-            holder.FirstText = (TextView) convertView.findViewById(R.id.FirstText);
-            holder.SecondText = (TextView) convertView.findViewById(R.id.SecondText);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
+        if (user != null) {
+            TextView Name = (TextView) convertView.findViewById(R.id.textName);
+            TextView Phone = (TextView) convertView.findViewById(R.id.textPhone);
+            TextView Email = (TextView) convertView.findViewById(R.id.textEmail);
+            TextView Street = (TextView) convertView.findViewById(R.id.textStreet);
+            if (Name != null) {
+                Name.setText(user.getName());
+            }
+            if (Phone != null) {
+                Phone.setText((user.getPhone()));
+            }
+            if (Email != null) {
+                Email.setText((user.getEmail()));
+            }
+            if (Street != null) {
+                Street.setText((user.getStreet()));
+            }
         }
 
-        holder.FirstText.setText("JOPH");
-        holder.SecondText.setText("44");
-
         return convertView;
-    }
-
-    static class ViewHolder {
-        TextView FirstText;
-        TextView SecondText;
     }
 }
